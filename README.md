@@ -6,4 +6,4 @@ Snowflake Snowflake
 WeatherAPI
 Python
 
-This project collects real-time weather data from multiple cities, stores it in DynamoDB, streams changes into S3, and automatically loads data into Snowflake using Snowpipe.# WEATHER-PROJECT
+This project collects real-time weather data from multiple cities, stores it in DynamoDB, streams changes into S3, and automatically loads data into Snowflake using Snowpipe.
