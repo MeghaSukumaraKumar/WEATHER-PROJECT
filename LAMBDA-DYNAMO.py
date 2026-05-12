@@ -5,17 +5,23 @@ from datetime import datetime
 from decimal import Decimal
 import os
 
-dynamoDb = boto3.resource('dynamodb')
+#creates a dynamodb service object
+dynamoDb = boto3.resource('dynamodb')  
 myTable = dynamoDb.Table('weather-api-table')
 
+#function to fetcg data from the api
 def get_weather_data(city):
     api_url = "http://api.weatherapi.com/v1/current.json"
     params = {
         "q": city,
+        #to store in the lambda environment
         "key": os.environ["WEATHER_API_KEY"]
     }
+
+    #calling the weather api
     response = requests.get(api_url, params=params)
-    if response.status_code != 200:
+    #checking the API status 
+    if response.status_code != 200:  
         return None
     return response.json()
 
@@ -24,12 +30,14 @@ def lambda_handler(event, context):
     cities = ["Bangalore","Delhi","Mumbai","Chennai","Kashmir","Dehradun","Kochi","Kerala","Hyderabad","Sikkim"]
     
     for city in cities:
+          #to fetch weather data
         data = get_weather_data(city)
 
         if not data:
             print(f"Failed for {city}")
             continue
-
+        
+        #extracting the info
         temp = data['current']['temp_c']
         wind_speed = data['current']['wind_mph']
         wind_dir = data['current']['wind_dir']
@@ -47,8 +55,8 @@ def lambda_handler(event, context):
             'pressure_mb': Decimal(str(pressure_mb)),
             'humidity': Decimal(str(humidity))
         }
-
-        myTable.put_item(Item=item)
+        #step to insert the data into dynamodb table
+        myTable.put_item(Item=item) 
 
     return {
         'statusCode': 200,
