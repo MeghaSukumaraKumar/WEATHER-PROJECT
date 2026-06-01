@@ -23,7 +23,7 @@ def get_weather_data(city):
 
 def lambda_handler(event, context):
 
-    cities = ["Kollam","Kochi","Bangalore","Delhi","Mumbai","Chennai","Kashmir","Dehradun","Hyderabad"]
+    cities = ["Kochi","Bangalore","Delhi","Mumbai","Chennai","Kashmir","Dehradun","Hyderabad"]
 
     for city in cities:
 
