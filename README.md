@@ -1,8 +1,8 @@
 A fully serverless real-time weather data pipeline built using:
-Amazon Web Services Lambda
-Amazon Web Services DynamoDB
-Amazon Web Services S3
-Snowflake Snowflake
+AWSLambda
+AWS DynamoDB
+AWS S3
+Snowflake
 WeatherAPI
 Python
 
