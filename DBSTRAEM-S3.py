@@ -4,24 +4,15 @@ import csv
 import io
 from datetime import datetime
 
-# AWS Clients
 s3 = boto3.client('s3')
-
-# S3 Bucket Name
 BUCKET_NAME = 'weatherpro-bucket'
-
-# Folder inside S3 bucket
 FOLDER_NAME = 'projectsnow/'
 
 
 def lambda_handler(event, context):
-
-    # Loop through DynamoDB Stream records
     for record in event.get('Records', []):
-
         # Process only INSERT events
         if record.get('eventName') == 'INSERT':
-
             # Extract DynamoDB data
             new_image = record.get('dynamodb', {}).get('NewImage', {})
 
@@ -35,10 +26,7 @@ def lambda_handler(event, context):
 
             # Create CSV in memory
             csv_buffer = io.StringIO()
-
             writer = csv.writer(csv_buffer)
-
-            # CSV Header
             writer.writerow([
                 'city',
                 'time',
@@ -62,7 +50,6 @@ def lambda_handler(event, context):
 
             # File name
             file_name = f"weather_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-
             # Upload CSV to S3 folder
             s3.put_object(
                 Bucket=BUCKET_NAME,
