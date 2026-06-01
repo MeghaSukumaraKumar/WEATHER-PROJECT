@@ -21,8 +21,8 @@ CREATE or replace STORAGE INTEGRATION S3_INT
 TYPE = external_stage
 STORAGE_PROVIDER = s3
 ENABLED = TRUE
-STORAGE_AWS_ROLE_ARN = 'arn:aws:iam::590379873533:role/s3access-snow'
-STORAGE_ALLOWED_LOCATIONS = ('s3://bucket-weatherapi/weather/');
+STORAGE_AWS_ROLE_ARN = 'arn:aws:iam::590379873533:role/SNOWFLAKE_ROLE'
+STORAGE_ALLOWED_LOCATIONS = ('s3://weatherpro-bucket/projectsnow/');
 
 DESC INTEGRATION S3_INT;
 
@@ -37,14 +37,14 @@ CREATE or replace file format CSV_FORMAT
 
 --CREATE A STAGE
 CREATE or replace stage CSV_STAGE
-url = 's3://bucket-weatherapi/weather/'
+url = 's3://weatherpro-bucket/projectsnow/'
 STORAGE_INTEGRATION = S3_INT
 file_format = CSV_FORMAT;
 
 show stages;
 
 ---CREATE A SNOWPIPE TO LOAD DATA FROM S3 TO SNOWFLAKE
-CREATE or replace pipe myweatherpipe
+CREATE or replace pipe MYWEATHER_PIPE
 AUTO_INGEST = TRUE
 AS 
 COPY INTO WEATHER_TABLE
@@ -52,4 +52,7 @@ FROM @CSV_STAGE
 ON_ERROR = CONTINUE;
 
 show pipes;
-select * from weather_snow;
+
+select * from weather_table;
+
+
