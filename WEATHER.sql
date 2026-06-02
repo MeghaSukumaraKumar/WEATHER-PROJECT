@@ -53,6 +53,6 @@ ON_ERROR = CONTINUE;
 
 show pipes;
 
-select * from weather_table;
+SELECT * FROM WEATHER_TABLE;
 
 
