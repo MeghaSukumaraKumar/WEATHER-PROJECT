@@ -64,17 +64,16 @@ Whenever new data is inserted into DynamoDB:
 
 The second Lambda function:
 - Reads DynamoDB stream events
-- Converts records into JSON format
+- Converts records into CSV format
 - Uploads files into Amazon S3
 
 Example:
 python
 s3.put_object(
-    Bucket="weather-bucket",
-    Key=f"weather/weather_{timestamp}.json",
-    Body=json.dumps(result)
-)
-
+                Bucket=BUCKET_NAME,
+                Key=f"{FOLDER_NAME}/{file_name}",
+                Body=csv_buffer.getvalue()
+            )
 
 ---
 
@@ -128,21 +127,17 @@ Snowflake
 # Repository Structure
 
 text
-weather-data-pipeline/
-│
-├── lambda/
-│   ├── weather_fetch_lambda.py
-│   └── dynamodb_to_s3_lambda.py
-│
-├── snowflake/
-│   ├── storage_integration.sql
-│   ├── external_stage.sql
-│   ├── snowpipe.sql
-│   └── table.sql
-│
-├── architecture.png
-├── requirements.txt
-└── README.md
+WEATHER-PROJECT
+
+DBSTREAM-S3.py
+
+LAMBDA-DYNAMO.py
+
+README.md
+
+WEATHER.sql
+
+requirements.txt
 
 
 ---
@@ -155,7 +150,7 @@ Schedules weather API calls automatically.
 ## Lambda Functions
 - Fetch weather data
 - Process DynamoDB stream records
-- Upload JSON files to S3
+- Upload CSV files to S3
 
 ## DynamoDB
 Stores incoming weather data.
@@ -164,7 +159,7 @@ Stores incoming weather data.
 Captures table changes in real time.
 
 ## S3 Bucket
-Stores JSON weather files.
+Stores CSV weather files.
 
 ## SQS
 Triggers Snowpipe notifications.
@@ -192,28 +187,33 @@ Automatically ingests new files from S3.
 ## Create File Format
 
 sql
-CREATE OR REPLACE FILE FORMAT weather_json
-TYPE = 'JSON';
+CREATE or replace file format CSV_FORMAT
+                    type = csv
+                    field_delimiter = ','
+                    skip_header = 1
+                    null_if = ('NULL' , 'null')
+                    empty_field_as_null = true; 
+
 
 
 ## Create Stage
 
 sql
-CREATE OR REPLACE STAGE my_s3_stage
-URL = 's3://weather-bucket/'
-STORAGE_INTEGRATION = my_s3_integration
-FILE_FORMAT = weather_json;
+CREATE or replace stage CSV_STAGE
+url = 's3://weatherpro-bucket/projectsnow/'
+STORAGE_INTEGRATION = S3_INT
+file_format = CSV_FORMAT;
 
 
 ## Create Snowpipe
 
 sql
-CREATE OR REPLACE PIPE weather_pipe
+CREATE or replace pipe MYWEATHER_PIPE
 AUTO_INGEST = TRUE
-AS
-COPY INTO weather_table
-FROM @my_s3_stage;
-
+AS 
+COPY INTO WEATHER_TABLE
+FROM @CSV_STAGE
+ON_ERROR = CONTINUE;
 
 ---
 
@@ -222,7 +222,8 @@ FROM @my_s3_stage;
 ## 1. Clone Repository
 
 bash
-git clone https://github.com/your-username/weather-data-pipeline.git
+git clone https://github.com/MeghaSukumaraKumar/WEATHER-PROJECT.git
+
 cd weather-data-pipeline
 
 
