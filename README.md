@@ -70,15 +70,12 @@ The second Lambda function:
 Example:
 python
 
-s3.put_object(
-               
-                Bucket=BUCKET_NAME,
-                
-                Key=f"{FOLDER_NAME}/{file_name}",
-                
-                Body=csv_buffer.getvalue()
-                
-            )
+
+s3.put_object(   
+Bucket=BUCKET_NAME,
+Key=f"{FOLDER_NAME}/{file_name}",
+Body=csv_buffer.getvalue()
+)
 
 ---
 
@@ -192,17 +189,12 @@ Automatically ingests new files from S3.
 ## Create File Format
 
 
-CREATE or replace file format CSV_FORMAT
-
-                    type = csv
-                    
-                    field_delimiter = ','
-                    
-                    skip_header = 1
-                    
-                    null_if = ('NULL' , 'null')
-                    
-                    empty_field_as_null = true; 
+CREATE or replace file format CSV_FORMAT 
+type = cSV
+field_delimiter = ','
+skip_header = 1
+null_if = ('NULL' , 'null')
+empty_field_as_null = true; 
 
 
 
@@ -210,11 +202,8 @@ CREATE or replace file format CSV_FORMAT
 
 
 CREATE or replace stage CSV_STAGE
-
 url = 's3://weatherpro-bucket/projectsnow/'
-
 STORAGE_INTEGRATION = S3_INT
-
 file_format = CSV_FORMAT;
 
 
@@ -222,15 +211,10 @@ file_format = CSV_FORMAT;
 
 
 CREATE or replace pipe MYWEATHER_PIPE
-
 AUTO_INGEST = TRUE
-
 AS 
-
 COPY INTO WEATHER_TABLE
-
 FROM @CSV_STAGE
-
 ON_ERROR = CONTINUE;
 
 ---
