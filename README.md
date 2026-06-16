@@ -70,9 +70,13 @@ The second Lambda function:
 Example:
 python
 s3.put_object(
+               
                 Bucket=BUCKET_NAME,
+                
                 Key=f"{FOLDER_NAME}/{file_name}",
+                
                 Body=csv_buffer.getvalue()
+                
             )
 
 ---
