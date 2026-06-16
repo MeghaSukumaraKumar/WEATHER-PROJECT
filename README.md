@@ -7,23 +7,41 @@ This architecture demonstrates how modern cloud-native services can be combined 
 *Architecture
 
 OpenWeather API
+
         ↓
+        
 Amazon EventBridge
+
         ↓
+
 AWS Lambda
+
         ↓
+        
 Amazon DynamoDB
+
         ↓
+        
 DynamoDB Streams
+
         ↓
+        
 AWS Lambda
+
         ↓
+        
 Amazon S3
+
         ↓
+        
 Amazon SQS Notification
+
         ↓
+        
 Snowpipe
+
         ↓
+        
 Snowflake
 
 *Tech Stack
