@@ -100,25 +100,25 @@ This enables near real-time analytics.
 
 # Architecture Flow
 
-text
+
 OpenWeather API
-        ↓
+        -
 EventBridge
-        ↓
+        -
 Lambda
-        ↓
+        -
 DynamoDB
-        ↓
+        -
 DynamoDB Stream
-        ↓
+        -
 Lambda
-        ↓
+        -
 Amazon S3
-        ↓
+        -
 SQS Notification
-        ↓
+        -
 Snowpipe
-        ↓
+        -
 Snowflake
 
 
@@ -126,7 +126,7 @@ Snowflake
 
 # Repository Structure
 
-text
+
 WEATHER-PROJECT
 
 DBSTREAM-S3.py
@@ -186,7 +186,7 @@ Automatically ingests new files from S3.
 
 ## Create File Format
 
-sql
+
 CREATE or replace file format CSV_FORMAT
                     type = csv
                     field_delimiter = ','
@@ -198,7 +198,7 @@ CREATE or replace file format CSV_FORMAT
 
 ## Create Stage
 
-sql
+
 CREATE or replace stage CSV_STAGE
 url = 's3://weatherpro-bucket/projectsnow/'
 STORAGE_INTEGRATION = S3_INT
@@ -207,7 +207,7 @@ file_format = CSV_FORMAT;
 
 ## Create Snowpipe
 
-sql
+
 CREATE or replace pipe MYWEATHER_PIPE
 AUTO_INGEST = TRUE
 AS 
@@ -221,7 +221,7 @@ ON_ERROR = CONTINUE;
 
 ## 1. Clone Repository
 
-bash
+
 git clone https://github.com/MeghaSukumaraKumar/WEATHER-PROJECT.git
 
 cd weather-data-pipeline
@@ -231,7 +231,7 @@ cd weather-data-pipeline
 
 ## 2. Install Python Dependencies
 
-bash
+
 pip install -r requirements.txt
 
 
